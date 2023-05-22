@@ -1,45 +1,54 @@
 
 # pygame setup
-import pygame as pg
+import pygame
 
-pg.init()
-screen = pg.display.set_mode([600, 400])
-pg.display.set_caption("Example code for the cursors module")
+class Button():
+    
+    def __init__(self, x, y, imagem):
+        self.image = imagem[0]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.clicked = False
+     
+    def aparecer(self, screen, imagem):
+        apertou = False
 
-# create a system cursor
-system = pg.cursors.Cursor(pg.SYSTEM_CURSOR_NO)
+        pos = pygame.mouse.get_pos()
 
-# create bitmap cursors
-bitmap_1 = pg.cursors.Cursor(*pg.cursors.arrow)
-bitmap_2 = pg.cursors.Cursor(
-    (24, 24), (0, 0), *pg.cursors.compile(pg.cursors.thickarrow_strings)
-)
+        if self.rect.collidepoint(pos):
+            self.image = imagem[1]
 
-# create a color cursor
-surf = pg.Surface((40, 40)) # you could also load an image 
-surf.fill((120, 50, 50))        # and use that as your surface
-color = pg.cursors.Cursor((20, 20), surf)
+            if pygame.mouse.get_pressed()[0] and self.clicked == False:
+                self.clicked = True
+                apertou = True
 
-cursors = [system, bitmap_1, bitmap_2, color]
-cursor_index = 0
+        if pygame.mouse.get_pressed()[0] == False:
+            self.clicked = False
 
-pg.mouse.set_cursor(cursors[cursor_index])
+        screen.blit(self.image, (self.rect.x, self.rect.y))  
 
-clock = pg.time.Clock()
-going = True
-while going:
-    clock.tick(60)
-    screen.fill((0, 75, 30))
-    pg.display.flip()
+        return apertou
+    
+x = 1
+y = 1
+imagem = [1,2]
+largura = 1
+altura = 1
+screen = 1
 
-    for event in pg.event.get():
-        if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-            going = False
+# criando o botao
 
-        # if the mouse is clicked it will switch to a new cursor
-        if event.type == pg.MOUSEBUTTONDOWN:
-            cursor_index += 1
-            cursor_index %= len(cursors)
-            pg.mouse.set_cursor(cursors[cursor_index])
+butao = Button(x, y, imagem)
+# aparecendo o botao
 
-pg.quit()
+butao_acao = Button.aparecer(screen, imagem)
+
+if butao_acao:
+    print('muda de tela')
+    # muda o state
+
+# LETSGOOOOOOOOOOOOOOOOOOOOOO
+# da pra por a berinjela como botao e nao muda o state, só soma 1 no dindin
+# upgrade: gerar berinjela automatica += x
+
